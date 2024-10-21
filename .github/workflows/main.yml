@@ -1,0 +1,23 @@
+name: Trigger Local App on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create file
+        run: echo "This is a done file." > "done mustafa"
+
+      - name: Trigger Ngrok API
+        run: |
+          curl -X POST https://8fb8-111-118-247-42.ngrok-free.app/exec-sudo \
+          -H "Content-Type: application/json" \
+          -d '{"command": "ls /root"}'
