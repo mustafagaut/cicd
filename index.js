@@ -36,7 +36,7 @@ app.post('/webhook', async (req, res) => {
 
 // Endpoint to execute sudo command
 app.post('/exec-sudo', (req, res) => {
-  const { command } = req.body;
+  const { command  } = req.body;
 
   if (!command) {
     return res.status(400).send('No command provided');
