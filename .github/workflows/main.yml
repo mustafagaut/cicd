@@ -3,25 +3,25 @@ name: Run Sudo Command on EC2
 on:
   push:
     branches:
-      - main  # Trigger on push to 'main' branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository (if needed)
       - name: Checkout the repository
         uses: actions/checkout@v2
 
-      # Step 2: Set up SSH agent
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # Add your SSH private key as a secret
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Step 3: Run a sudo command on your EC2 instance
       - name: Run Sudo Command on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@ec2-18-119-3-208.us-east-2.compute.amazonaws.com "
-            sudo mkdir /opt/myfolder  # Example: Create a folder with sudo
+          ssh -o StrictHostKeyChecking=no ubuntu@ec2-18-119-3-208.us-east-2.compute.amazonaws.com << 'EOF'
+          sudo mkdir /opt/myfolder  # Example sudo command
+          EOF
+
+            
