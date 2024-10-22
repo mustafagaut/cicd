@@ -54,7 +54,7 @@ app.post('/exec-sudo', (req, res) => {
     console.log(`stdout: ${stdout}`);
     res.status(200).send(`Command executed successfully: ${stdout}`);
   });
-});
+});``
 
 const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {

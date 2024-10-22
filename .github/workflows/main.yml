@@ -1,23 +1,27 @@
-name: Trigger Local App on Push
+name: Run Sudo Command on EC2
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger on push to 'main' branch
 
 jobs:
-  trigger-app:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      # Step 1: Checkout the repository (if needed)
+      - name: Checkout the repository
         uses: actions/checkout@v2
 
-      - name: Create file
-        run: echo "This is a done file." > "done mustafa"
+      # Step 2: Set up SSH agent
+      - name: Set up SSH agent
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}  # Add your SSH private key as a secret
 
-      - name: Trigger Ngrok API
+      # Step 3: Run a sudo command on your EC2 instance
+      - name: Run Sudo Command on EC2
         run: |
-          curl -X POST https://8fb8-111-118-247-42.ngrok-free.app/exec-sudo \
-          -H "Content-Type: application/json" \
-          -d '{"command": "ls /root"}'
+          ssh -o StrictHostKeyChecking=no ubuntu@ec2-18-119-3-208.us-east-2.compute.amazonaws.com "
+            sudo mkdir /opt/myfolder  # Example: Create a folder with sudo
