@@ -39,7 +39,7 @@ app.post('/exec-sudo', (req, res) => {
   const { command  } = req.body;
 
   if (!command) {
-    return res.status(400).send('No command provided');
+    return res.status(400).send('No command provided to the git');
   }
 
   exec(`sudo ${command}`, (error, stdout, stderr) => {
