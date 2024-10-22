@@ -14,9 +14,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up SSH agent
-        uses: webfactory/ssh-agent@v0.5.4
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "-----BEGIN OPENSSH PRIVATE KEY-----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-----END OPENSSH PRIVATE KEY-----" > key.pem
+          chmod 600 key.pem
+          eval $(ssh-agent)
+          ssh-add key.pem
 
       - name: Run Sudo Command on EC2
         run: |
@@ -24,4 +26,5 @@ jobs:
           sudo mkdir /opt/myfolder  # Example sudo command
           EOF
 
-            
+      - name: Clean up
+        run: rm key.pem
