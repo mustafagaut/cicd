@@ -45,7 +45,7 @@ app.post('/exec-sudo', (req, res) => {
   exec(`sudo ${command}`, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error executing command: ${error.message}`);
-      return res.status(500).send(`Errors: ${error.message}`);
+      return res.status(500).send(`Error: ${error.message}`);
     }
     if (stderr) {
       console.error(`stderr: ${stderr}`);
