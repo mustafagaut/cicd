@@ -33,8 +33,8 @@ jobs:
       - name: Encode PAT
         id: encode_pat
         run: |
-          # This script will URL-encode the PAT
-          encoded_pat=$(echo -n "${{ secrets.BLINKLY_PAT }}" | jq -sRr @uri)
+          # URL-encode the PAT without using jq
+          encoded_pat=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''${{ secrets.BLINKLY_PAT }}'''))")
           echo "encoded_pat=$encoded_pat" >> $GITHUB_ENV
 
       - name: Configure Git to use PAT for Pull
