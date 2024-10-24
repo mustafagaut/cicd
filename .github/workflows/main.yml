@@ -30,10 +30,22 @@ jobs:
           cd /opt/Blinkly
           pwd  # Print working directory to verify location
 
+      - name: Encode PAT
+        id: encode_pat
+        run: |
+          # This script will URL-encode the PAT
+          encoded_pat=$(echo -n "${{ secrets.BLINKLY_PAT }}" | jq -sRr @uri)
+          echo "encoded_pat=$encoded_pat" >> $GITHUB_ENV
+
       - name: Configure Git to use PAT for Pull
         run: |
           cd /opt/Blinkly
-          sudo git remote set-url origin https://imtiyaz.ahmad@ideavate.com:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
+          sudo git remote set-url origin https://imtiyaz.ahmad@ideavate.com:${{ env.encoded_pat }}@github.com/blinkly-crypto/Blinkly.git
+
+      - name: Check Remote URL
+        run: |
+          cd /opt/Blinkly
+          sudo git remote -v  # Check the configured remote URL
 
       - name: Pull latest changes
         run: |
