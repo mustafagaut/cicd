@@ -124,7 +124,7 @@ jobs:
           sudo npm install &&
           sudo npm run build
 
-      - name: Stop wildduck service
+      - name: Restart wildduck service
         run: |
           sudo systemctl start wildduck-webmail.service
           
