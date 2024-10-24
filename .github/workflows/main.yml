@@ -92,3 +92,11 @@ jobs:
           VC_API_AUTH_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZGM2MzI5ZWI3OGNiOWE1MzQ3MDk2YyIsInVzZXJuYW1lIjoiYmxpbmtseWVtYWlsIiwiaWF0IjoxNzA3NDYyMjAzLCJleHAiOjE3Mzg5OTgyMDN9.MA0COixzWuPyOy1yITivMiuuUgBtENE-54ikGIqR1Pg
           CHAT_API_URL=https://test.blinkly.com/chatserver/api/v1
           EOF'
+
+      - name: Run installation and build commands
+        run: |
+          cd /opt/wildduck-webmail
+          sudo npm install
+          sudo npm run bowerdeps
+          sudo npm run react-install
+          sudo npm run build
