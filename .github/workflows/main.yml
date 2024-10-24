@@ -23,7 +23,7 @@ jobs:
         with:
           repository: blinkly-crypto/Blinkly
           token: ${{ secrets.BLINKLY_PAT }}
-          path: /opt/Blinkly  # Specify the checkout path
+          path: cicd/Blinkly  # Checkout to a valid subdirectory
 
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
@@ -32,31 +32,31 @@ jobs:
 
       - name: Mark Blinkly directory as safe
         run: |
-          sudo git config --global --add safe.directory /opt/Blinkly
+          sudo git config --global --add safe.directory /opt/actions-runner/_work/cicd/cicd/cicd/Blinkly
 
       - name: Change to Blinkly directory
         run: |
-          cd /opt/Blinkly
+          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
           pwd  # Print working directory to verify location
 
       - name: Check Remote URL Before Setting
         run: |
-          cd /opt/Blinkly
+          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
           git remote -v  # Check the current remote URL before setting
 
       - name: Configure Git to use PAT for Pull
         run: |
-          cd /opt/Blinkly
+          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
           sudo git remote set-url origin https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
 
       - name: Check Remote URL After Setting
         run: |
-          cd /opt/Blinkly
+          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
           sudo git remote -v  # Check the configured remote URL again
 
       - name: Pull latest changes
         run: |
-          cd /opt/Blinkly
+          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
           sudo git pull
 
       - name: Stop wildduck service
@@ -73,7 +73,7 @@ jobs:
 
       - name: Copy content to /opt/wildduck-webmail
         run: |
-          sudo cp -rf /opt/Blinkly/. /opt/wildduck-webmail
+          sudo cp -rf /opt/actions-runner/_work/cicd/cicd/Blinkly/. /opt/wildduck-webmail
 
       - name: Change permissions for wildduck-webmail
         run: |
