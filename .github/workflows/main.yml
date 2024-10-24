@@ -54,3 +54,23 @@ jobs:
       - name: Stop wildduck service
         run: |
           sudo systemctl stop wildduck-webmail.service
+
+      - name: Removing wildduck-webmail directory
+        run: |
+          sudo rm -rf /opt/wildduck-webmail
+
+      - name: creating folder /opt/wildduck-webmail
+        run: |
+          sudo mkdir /opt/wildduck-webmail && cd /opt/
+      
+      - name:  copy content to /opt/wildduck-webmail
+        run: |
+          sudo cp -rf /opt/BlinklyRepo/Blinkly/. /opt/wildduck-webmail
+
+      - name:  command to change permission
+        run: |
+          sudo chmod -R 755 /opt/wildduck-webmail
+
+      - name:  command to change ownership
+        run: |
+          sudo chown -R deploy:deploy /opt/wildduck-webmail
