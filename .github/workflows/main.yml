@@ -10,11 +10,16 @@ jobs:
     runs-on: [self-hosted]
 
     steps:
+      - name: Clean up workspace
+        run: |
+          sudo rm -rf /opt/actions-runner/_work/cicd/cicd/*
+
       - name: Checkout the repository
         uses: actions/checkout@v2
         with:
-          repository: blinkly-crypto/Blinkly  # Your repository
-          token: ${{ secrets.BLINKLY_PAT }}  # Your Personal Access Token for authentication
+          repository: blinkly-crypto/Blinkly
+          token: ${{ secrets.BLINKLY_PAT }}
+          fetch-depth: 1  # Only fetch the latest commit
 
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
@@ -92,27 +97,12 @@ jobs:
           CHAT_API_URL=https://test.blinkly.com/chatserver/api/v1
           EOF'
 
-      - name: Prepare Blinkly directory
-        run: |
-          if [ -d /tmp/Blinkly ]; then
-            if [ "$(ls -A /tmp/Blinkly)" ]; then
-              echo "Directory /tmp/Blinkly is not empty. Removing contents."
-              sudo rm -rf /tmp/Blinkly/*
-            else
-              echo "Directory /tmp/Blinkly exists and is empty."
-            fi
-          else
-            echo "Creating directory /tmp/Blinkly."
-            mkdir -p /tmp/Blinkly
-          fi
-
       - name: Run installation and build commands
         run: |
           cd /opt/wildduck-webmail
-          sudo npm ci > npm_install.log 2>&1  # Log output to npm_install.log
-          sudo node -e "const { execSync } = require('child_process'); execSync('npm run bowerdeps', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > bowerdeps.log 2>&1  # Log output to bowerdeps.log
-          sudo node -e "const { execSync } = require('child_process'); execSync('npm run build', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_build.log 2>&1  # Log output to npm_build.log
-
+          sudo node -e "const { execSync } = require('child_process'); execSync('npm ci', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_install.log 2>&1
+          sudo node -e "const { execSync } = require('child_process'); execSync('npm run bowerdeps', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_bowerdeps.log 2>&1
+      
       - name: Updating files
         run: |
           sudo sed -i 's|domain="localhost"|domain="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
@@ -135,8 +125,8 @@ jobs:
       - name: Install packages in blinkly-email-app
         run: |
           cd /opt/wildduck-webmail/blinkly-email-app
-          sudo npm ci > npm_install_blinkly_email.log 2>&1  # Log output to npm_install_blinkly_email.log
-          sudo node -e "const { execSync } = require('child_process'); execSync('npm run build', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_build_blinkly_email.log 2>&1  # Log output to npm_build_blinkly_email.log
+          sudo node -e "const { execSync } = require('child_process'); execSync('npm ci', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_install.log 2>&1
+          sudo node -e "const { execSync } = require('child_process'); execSync('npm run build', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_build.log 2>&1
 
       - name: Restart wildduck service
         run: |
