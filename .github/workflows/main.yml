@@ -12,12 +12,15 @@ jobs:
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
+        with:
+          repository: blinkly-crypto/Blinkly  # Your repository
+          token: ${{ secrets.BLINKLY_PAT }}  # Use your PAT here if needed
 
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      
+
       - name: Mark Blinkly directory as safe
         run: |
           git config --global --add safe.directory /opt/Blinkly
@@ -30,10 +33,8 @@ jobs:
       - name: Pull latest changes
         run: |
           cd /opt/Blinkly
-          git pull
+          sudo git pull
 
       - name: Stop wildduck service
         run: |
           sudo systemctl stop wildduck-webmail.service
-
-            
