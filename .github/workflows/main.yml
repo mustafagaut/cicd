@@ -33,7 +33,7 @@ jobs:
       - name: Configure Git to use PAT for Pull
         run: |
           cd /opt/Blinkly
-          git remote set-url origin https://imtiyaz.ahmad@ideavate.com:${{ secrets.GITHUB_PAT }}@github.com/blinkly-crypto/Blinkly.git
+          sudo git remote set-url origin https://imtiyaz.ahmad@ideavate.com:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
 
       - name: Pull latest changes
         run: |
