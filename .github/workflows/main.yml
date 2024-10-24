@@ -38,8 +38,8 @@ jobs:
       - name: Configure Git to use PAT for Pull
         run: |
           cd /opt/Blinkly
-          # Construct the remote URL without encoding since PAT has no special chars
-          sudo git remote set-url origin https://imtiyaz.ahmad:{{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
+          # Set the remote URL correctly without encoding
+          sudo git remote set-url origin https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
 
       - name: Check Remote URL After Setting
         run: |
