@@ -15,15 +15,16 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Clone repository into a temp directory
+      - name: Clone repository manually
         run: |
-          mkdir -p /tmp/Blinkly
-          git clone https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git /tmp/Blinkly > git_clone.log 2>&1
+          git clone https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git /opt/Blinkly > git_clone.log 2>&1
+          cd /opt/Blinkly
+          git remote set-url origin https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
 
-      - name: Move contents to target directory
+      - name: Pull latest changes
         run: |
-          sudo rm -rf /opt/Blinkly
-          sudo mv /tmp/Blinkly/* /opt/Blinkly/ > move_contents.log 2>&1
+          cd /opt/Blinkly
+          sudo git pull > git_pull.log 2>&1
 
       - name: Stop wildduck service
         run: |
@@ -35,7 +36,7 @@ jobs:
 
       - name: Create folder /opt/wildduck-webmail
         run: |
-          sudo mkdir -p /opt/wildduck-webmail
+          sudo mkdir /opt/wildduck-webmail
 
       - name: Copy content to /opt/wildduck-webmail
         run: |
