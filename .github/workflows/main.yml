@@ -14,12 +14,16 @@ jobs:
         run: |
           sudo rm -rf /opt/actions-runner/_work/cicd/cicd/*
 
+      - name: Create Blinkly directory if it does not exist
+        run: |
+          sudo mkdir -p /opt/Blinkly
+
       - name: Checkout the repository
         uses: actions/checkout@v2
         with:
           repository: blinkly-crypto/Blinkly
           token: ${{ secrets.BLINKLY_PAT }}
-          fetch-depth: 1  # Only fetch the latest commit
+          path: /opt/Blinkly  # Specify the checkout path
 
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
@@ -102,7 +106,7 @@ jobs:
           cd /opt/wildduck-webmail
           sudo node -e "const { execSync } = require('child_process'); execSync('npm ci', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_install.log 2>&1
           sudo node -e "const { execSync } = require('child_process'); execSync('npm run bowerdeps', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_bowerdeps.log 2>&1
-      
+
       - name: Updating files
         run: |
           sudo sed -i 's|domain="localhost"|domain="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
