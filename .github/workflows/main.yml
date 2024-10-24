@@ -1,4 +1,4 @@
-name: Run Sudo Command on EC2
+name: Update Repo 2 on EC2
 
 on:
   push:
@@ -12,22 +12,22 @@ jobs:
     steps:
       - name: Clean up workspace
         run: |
-          sudo rm -rf /opt/actions-runner/_work/cicd/cicd/*
+          sudo rm -rf /opt/actions-runner/_work/cicd/cicd/*  # Clean previous workspace
 
-      - name: Create Blinkly directory if it does not exist
-        run: |
-          sudo mkdir -p /opt/Blinkly
-
-      - name: Checkout the repository
+      - name: Checkout repo 2 (Blinkly)
         uses: actions/checkout@v2
         with:
-          repository: blinkly-crypto/Blinkly
-          token: ${{ secrets.BLINKLY_PAT }}
-          path: cicd/Blinkly  # Checkout to a valid subdirectory
+          repository: blinkly-crypto/Blinkly  # Your repo 2
+          token: ${{ secrets.BLINKLY_PAT }}  # Personal Access Token for authentication
+          path: cicd/Blinkly  # Checkout path for the repository
 
-      - name: List directory contents after checkout
+      - name: List contents of the cicd directory
         run: |
           ls -la /opt/actions-runner/_work/cicd/cicd  # List contents to verify checkout
+
+      - name: List contents of the Blinkly directory
+        run: |
+          ls -la /opt/actions-runner/_work/cicd/cicd/Blinkly  # Check if Blinkly directory exists
 
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
@@ -36,48 +36,32 @@ jobs:
 
       - name: Mark Blinkly directory as safe
         run: |
-          sudo git config --global --add safe.directory /opt/actions-runner/_work/cicd/cicd/cicd/Blinkly
+          sudo git config --global --add safe.directory /opt/actions-runner/_work/cicd/cicd/Blinkly
 
       - name: Change to Blinkly directory
         run: |
-          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
-          pwd  # Print working directory to verify location
+          cd /opt/actions-runner/_work/cicd/cicd/Blinkly || exit 1  # Navigate to Blinkly directory
 
-      - name: Check Remote URL Before Setting
+      - name: Pull latest changes in repo 2
         run: |
-          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
-          git remote -v  # Check the current remote URL before setting
-
-      - name: Configure Git to use PAT for Pull
-        run: |
-          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
-          sudo git remote set-url origin https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
-
-      - name: Check Remote URL After Setting
-        run: |
-          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
-          sudo git remote -v  # Check the configured remote URL again
-
-      - name: Pull latest changes
-        run: |
-          cd /opt/actions-runner/_work/cicd/cicd/Blinkly
-          sudo git pull
+          cd /opt/actions-runner/_work/cicd/cicd/Blinkly || exit 1
+          sudo git pull origin main  # Pull the latest changes from the main branch
 
       - name: Stop wildduck service
         run: |
           sudo systemctl stop wildduck-webmail.service
 
-      - name: Removing wildduck-webmail directory
+      - name: Remove existing wildduck-webmail directory
         run: |
           sudo rm -rf /opt/wildduck-webmail
 
       - name: Create folder /opt/wildduck-webmail
         run: |
-          sudo mkdir -p /opt/wildduck-webmail
+          sudo mkdir /opt/wildduck-webmail
 
       - name: Copy content to /opt/wildduck-webmail
         run: |
-          sudo cp -rf /opt/actions-runner/_work/cicd/cicd/Blinkly/. /opt/wildduck-webmail
+          sudo cp -rf /opt/actions-runner/_work/cicd/cicd/Blinkly/. /opt/wildduck-webmail  # Copy files to new directory
 
       - name: Change permissions for wildduck-webmail
         run: |
@@ -108,8 +92,8 @@ jobs:
       - name: Run installation and build commands
         run: |
           cd /opt/wildduck-webmail
-          sudo node -e "const { execSync } = require('child_process'); execSync('npm ci', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_install.log 2>&1
-          sudo node -e "const { execSync } = require('child_process'); execSync('npm run bowerdeps', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_bowerdeps.log 2>&1
+          sudo node -e "const { execSync } = require('child_process'); execSync('npm ci', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_install.log 2>&1  # Log output to npm_install.log
+          sudo npm run bowerdeps > npm_bowerdeps.log 2>&1
 
       - name: Updating files
         run: |
@@ -133,8 +117,8 @@ jobs:
       - name: Install packages in blinkly-email-app
         run: |
           cd /opt/wildduck-webmail/blinkly-email-app
-          sudo node -e "const { execSync } = require('child_process'); execSync('npm ci', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_install.log 2>&1
-          sudo node -e "const { execSync } = require('child_process'); execSync('npm run build', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_build.log 2>&1
+          sudo node -e "const { execSync } = require('child_process'); execSync('npm ci', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_install_blinkly_email.log 2>&1
+          sudo npm run build > npm_build.log 2>&1  # Log output to npm_build.log
 
       - name: Restart wildduck service
         run: |
