@@ -95,8 +95,8 @@ jobs:
       - name: Run installation and build commands
         run: |
           cd /opt/wildduck-webmail
-          sudo npm ci > /dev/null 2>&1  # Use npm ci for CI environments
-          sudo npm run bowerdeps > /dev/null 2>&1
+          sudo npm ci --silent > npm_install.log 2>&1  # Use npm ci for CI environments
+          sudo node -e "const { execSync } = require('child_process'); execSync('npm run bowerdeps', { stdio: 'inherit', maxBuffer: 1024 * 1024 * 10 });"  # Increased buffer size
 
       - name: Updating files
         run: |
@@ -117,4 +117,12 @@ jobs:
           REACT_APP_TURN_PASSWORD=webkul123
           EOF'
 
+      - name: Install packages in blinkly-email-app
+        run: |
+          cd /opt/wildduck-webmail/blinkly-email-app
+          sudo npm ci --silent > npm_install.log 2>&1
+          sudo npm run build --silent > npm_build.log 2>&1
 
+      - name: Restart wildduck service
+        run: |
+          sudo systemctl start wildduck-webmail.service
