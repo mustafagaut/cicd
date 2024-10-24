@@ -74,3 +74,21 @@ jobs:
       - name:  command to change ownership
         run: |
           sudo chown -R deploy:deploy /opt/wildduck-webmail
+
+      - name: Create .env file
+        run: |
+          cat <<EOF > /opt/wildduck-webmail/.env
+          DB_PROTOCOL=mongodb+srv
+          DB_USER=testAdmin
+          DB_PASS=uPhqo99tXHOc4Kc8
+          DB_NAME=wildduck
+          DB_URL=test-blinkly-com.uapme.mongodb.net
+          STRIPE_KEY=sk_test_6xHWgDHD3TGEszepeyIvw3rR00Stfps2C6
+          NOTIFICATION_USER=notification
+          NOTIFICATION_PASSWORD=f186694a-f044-4753-92f9-6f99c98701df
+          replyAllDefaultUser=via@test.blinkly.com
+          replyAllDefaultPswd=bac4341a-3b32-4870-88fd-410e914acc08
+          VC_API_URL=https://vc.blinkly.com
+          VC_API_AUTH_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZGM2MzI5ZWI3OGNiOWE1MzQ3MDk2YyIsInVzZXJuYW1lIjoiYmxpbmtseWVtYWlsIiwiaWF0IjoxNzA3NDYyMjAzLCJleHAiOjE3Mzg5OTgyMDN9.MA0COixzWuPyOy1yITivMiuuUgBtENE-54ikGIqR1Pg
+          CHAT_API_URL=https://test.blinkly.com/chatserver/api/v1
+          EOF
