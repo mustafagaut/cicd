@@ -65,7 +65,7 @@ jobs:
       
       - name:  copy content to /opt/wildduck-webmail
         run: |
-          sudo cp -rf /opt/BlinklyRepo/Blinkly/. /opt/wildduck-webmail
+          sudo cp -rf /opt/Blinkly/. /opt/wildduck-webmail
 
       - name:  command to change permission
         run: |
