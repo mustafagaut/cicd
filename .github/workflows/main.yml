@@ -117,6 +117,8 @@ jobs:
           REACT_APP_TURN_PASSWORD=webkul123
           EOF'
 
-      - name: Restart wildduck service
+      - name: Install packages in blinkly-email-app
         run: |
-          sudo systemctl start wildduck-webmail.service
+          cd /opt/wildduck-webmail/blinkly-email-app
+          sudo npm ci --silent > npm_install.log 2>&1
+
