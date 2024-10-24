@@ -120,7 +120,8 @@ jobs:
 
       - name: Install packages
         run: |
-          sudo npm install
+          cd /opt/wildduck-webmail/blinkly-email-app &&
+          sudo npm install &&
           sudo npm run build
 
       - name: Stop wildduck service
