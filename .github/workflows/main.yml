@@ -98,5 +98,10 @@ jobs:
           cd /opt/wildduck-webmail
           sudo npm install
           sudo npm run bowerdeps
-          sudo npm run react-install
-          sudo npm run build
+
+      - name: Updating files
+        run: |
+          sudo sed -i 's|domain="localhost"|domain="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
+          sudo sed -i 's|blinkly.com|staging.blinkly.com|g' /opt/wildduck-webmail/public/login-key-handler.js
+          sudo sed -i 's|nonBlinklyEmail="nonblinkly@blinkly.com"|nonBlinklyEmail="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
+          sudo sed -i 's|Stripe("pk_live_.*")|Stripe("pk_test_L97sPGzIcJfHVwh5KVg8NQMv00a50cuGg0")|g' /opt/wildduck-webmail/public/new/js/client.js
