@@ -17,6 +17,10 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      
+      - name: Mark Blinkly directory as safe
+        run: |
+          git config --global --add safe.directory /opt/Blinkly
 
       - name: Change to Blinkly directory
         run: |
