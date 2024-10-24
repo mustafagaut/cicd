@@ -59,19 +59,19 @@ jobs:
         run: |
           sudo rm -rf /opt/wildduck-webmail
 
-      - name: creating folder /opt/wildduck-webmail
+      - name: Create folder /opt/wildduck-webmail
         run: |
-          sudo mkdir /opt/wildduck-webmail && cd /opt/
-      
-      - name:  copy content to /opt/wildduck-webmail
+          sudo mkdir /opt/wildduck-webmail
+
+      - name: Copy content to /opt/wildduck-webmail
         run: |
           sudo cp -rf /opt/Blinkly/. /opt/wildduck-webmail
 
-      - name:  command to change permission
+      - name: Change permissions for wildduck-webmail
         run: |
           sudo chmod -R 755 /opt/wildduck-webmail
 
-      - name:  command to change ownership
+      - name: Change ownership of wildduck-webmail
         run: |
           sudo chown -R deploy:deploy /opt/wildduck-webmail
 
@@ -96,15 +96,15 @@ jobs:
       - name: Run installation and build commands
         run: |
           cd /opt/wildduck-webmail
-          sudo npm install
-          sudo npm run bowerdeps
+          sudo npm install >/dev/null 2>&1
+          sudo npm run bowerdeps >/dev/null 2>&1
 
       - name: Updating files
         run: |
-          sudo sed -i 's|domain="localhost"|domain="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
-          sudo sed -i 's|blinkly.com|staging.blinkly.com|g' /opt/wildduck-webmail/public/login-key-handler.js
-          sudo sed -i 's|nonBlinklyEmail="nonblinkly@blinkly.com"|nonBlinklyEmail="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
-          sudo sed -i 's|Stripe("pk_live_.*")|Stripe("pk_test_L97sPGzIcJfHVwh5KVg8NQMv00a50cuGg0")|g' /opt/wildduck-webmail/public/new/js/client.js
+          sudo sed -i 's|domain="localhost"|domain="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml >/dev/null 2>&1
+          sudo sed -i 's|blinkly.com|staging.blinkly.com|g' /opt/wildduck-webmail/public/login-key-handler.js >/dev/null 2>&1
+          sudo sed -i 's|nonBlinklyEmail="nonblinkly@blinkly.com"|nonBlinklyEmail="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml >/dev/null 2>&1
+          sudo sed -i 's|Stripe("pk_live_.*")|Stripe("pk_test_L97sPGzIcJfHVwh5KVg8NQMv00a50cuGg0")|g' /opt/wildduck-webmail/public/new/js/client.js >/dev/null 2>&1
 
       - name: Create Env file inside Blinkly-email-app
         run: |
@@ -118,11 +118,11 @@ jobs:
           REACT_APP_TURN_PASSWORD=webkul123
           EOF'
 
-      - name: Install packages
+      - name: Install packages in blinkly-email-app
         run: |
-          cd /opt/wildduck-webmail/blinkly-email-app &&
-          sudo npm install &&
-          sudo npm run build
+          cd /opt/wildduck-webmail/blinkly-email-app
+          sudo npm install >/dev/null 2>&1
+          sudo npm run build >/dev/null 2>&1
 
       - name: Restart wildduck service
         run: |
