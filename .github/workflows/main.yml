@@ -18,9 +18,18 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Create my_folder inside /opt
+      - name: Change to Blinkly directory
         run: |
-          sudo mkdir -p /opt/my_folder
-          sudo chmod 755 /opt/my_folder
+          cd /opt/BlinklyRepo/Blinkly
+          pwd  # Print working directory to verify location
+
+      - name: Pull latest changes
+        run: |
+          cd /opt/BlinklyRepo/Blinkly
+          git pull
+
+      - name: Stop wildduck service
+        run: |
+          sudo systemctl stop wildduck-webmail.service
 
             
