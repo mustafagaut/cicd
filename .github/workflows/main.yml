@@ -20,8 +20,7 @@ jobs:
 
       - name: Run Sudo Command on EC2
         run: |
-          ssh -o StrictHostKeyChecking=no root@ec2-18-119-3-208.us-east-2.compute.amazonaws.com << 'EOF'
-          sudo mkdir /opt/myfolder2 
+          sudo mkdir -p /opt/my_folder
           EOF
 
             
