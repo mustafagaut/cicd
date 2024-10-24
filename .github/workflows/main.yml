@@ -77,7 +77,7 @@ jobs:
 
       - name: Create .env file
         run: |
-          cat <<EOF > /opt/wildduck-webmail/.env
+          sudo bash -c 'cat <<EOF > /opt/wildduck-webmail/.env
           DB_PROTOCOL=mongodb+srv
           DB_USER=testAdmin
           DB_PASS=uPhqo99tXHOc4Kc8
@@ -91,4 +91,4 @@ jobs:
           VC_API_URL=https://vc.blinkly.com
           VC_API_AUTH_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZGM2MzI5ZWI3OGNiOWE1MzQ3MDk2YyIsInVzZXJuYW1lIjoiYmxpbmtseWVtYWlsIiwiaWF0IjoxNzA3NDYyMjAzLCJleHAiOjE3Mzg5OTgyMDN9.MA0COixzWuPyOy1yITivMiuuUgBtENE-54ikGIqR1Pg
           CHAT_API_URL=https://test.blinkly.com/chatserver/api/v1
-          EOF
+          EOF'
