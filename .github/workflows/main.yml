@@ -10,21 +10,45 @@ jobs:
     runs-on: [self-hosted]
 
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+        with:
+          repository: blinkly-crypto/Blinkly  # Your repository
+          token: ${{ secrets.BLINKLY_PAT }}  # Your Personal Access Token for authentication
+
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Clone repository manually
+      - name: Mark Blinkly directory as safe
         run: |
-          git clone https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git /opt/Blinkly > git_clone.log 2>&1
+          sudo git config --global --add safe.directory /opt/Blinkly
+
+      - name: Change to Blinkly directory
+        run: |
           cd /opt/Blinkly
-          git remote set-url origin https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
+          pwd  # Print working directory to verify location
+
+      - name: Check Remote URL Before Setting
+        run: |
+          cd /opt/Blinkly
+          git remote -v  # Check the current remote URL before setting
+
+      - name: Configure Git to use PAT for Pull
+        run: |
+          cd /opt/Blinkly
+          sudo git remote set-url origin https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
+
+      - name: Check Remote URL After Setting
+        run: |
+          cd /opt/Blinkly
+          sudo git remote -v  # Check the configured remote URL again
 
       - name: Pull latest changes
         run: |
           cd /opt/Blinkly
-          sudo git pull > git_pull.log 2>&1
+          sudo git pull
 
       - name: Stop wildduck service
         run: |
