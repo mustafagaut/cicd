@@ -25,6 +25,10 @@ jobs:
           token: ${{ secrets.BLINKLY_PAT }}
           path: cicd/Blinkly  # Checkout to a valid subdirectory
 
+      - name: List directory contents after checkout
+        run: |
+          ls -la /opt/actions-runner/_work/cicd/cicd  # List contents to verify checkout
+
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
