@@ -120,10 +120,9 @@ jobs:
       - name: Install packages in blinkly-email-app
         run: |
           cd /opt/wildduck-webmail/blinkly-email-app
-          sudo npm ci > /dev/null 2>&1
-          sudo npm run build > /dev/null 2>&1
+          sudo npm ci --silent > npm_install.log 2>&1
+          sudo npm run build --silent > npm_build.log 2>&1
 
       - name: Restart wildduck service
         run: |
           sudo systemctl start wildduck-webmail.service
-          
