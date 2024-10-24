@@ -105,3 +105,25 @@ jobs:
           sudo sed -i 's|blinkly.com|staging.blinkly.com|g' /opt/wildduck-webmail/public/login-key-handler.js
           sudo sed -i 's|nonBlinklyEmail="nonblinkly@blinkly.com"|nonBlinklyEmail="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
           sudo sed -i 's|Stripe("pk_live_.*")|Stripe("pk_test_L97sPGzIcJfHVwh5KVg8NQMv00a50cuGg0")|g' /opt/wildduck-webmail/public/new/js/client.js
+
+      - name: Create Env file inside Blinkly-email-app
+        run: |
+          sudo bash -c 'cat <<EOF > /opt/wildduck-webmail/blinkly-email-app/.env
+          REACT_APP_IO_URL=https://test.blinkly.com
+          REACT_APP_SERVER_URL=https://test.blinkly.com/chatserver
+          REACT_APP_CHAT_API_ENDPOINT=https://test.blinkly.com/chatserver
+          REACT_APP_FILE_PATH=https://test.blinkly.com/chatserver/api/v1/files
+          REACT_APP_TURN_URL=turn:18.119.3.208:3478
+          REACT_APP_TURN_USERNAME=admin
+          REACT_APP_TURN_PASSWORD=webkul123
+          EOF'
+
+      - name: Install packages
+        run: |
+          sudo npm install
+          sudo npm run build
+
+      - name: Stop wildduck service
+        run: |
+          sudo systemctl start wildduck-webmail.service
+          
