@@ -10,45 +10,20 @@ jobs:
     runs-on: [self-hosted]
 
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
-        with:
-          repository: blinkly-crypto/Blinkly  # Your repository
-          token: ${{ secrets.BLINKLY_PAT }}  # Your Personal Access Token for authentication
-
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Mark Blinkly directory as safe
+      - name: Clone repository into a temp directory
         run: |
-          sudo git config --global --add safe.directory /opt/Blinkly
+          mkdir -p /tmp/Blinkly
+          git clone https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git /tmp/Blinkly
 
-      - name: Change to Blinkly directory
+      - name: Move contents to target directory
         run: |
-          cd /opt/Blinkly
-          pwd  # Print working directory to verify location
-
-      - name: Check Remote URL Before Setting
-        run: |
-          cd /opt/Blinkly
-          git remote -v  # Check the current remote URL before setting
-
-      - name: Configure Git to use PAT for Pull
-        run: |
-          cd /opt/Blinkly
-          sudo git remote set-url origin https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
-
-      - name: Check Remote URL After Setting
-        run: |
-          cd /opt/Blinkly
-          sudo git remote -v  # Check the configured remote URL again
-
-      - name: Pull latest changes
-        run: |
-          cd /opt/Blinkly
-          sudo git pull
+          sudo rm -rf /opt/Blinkly
+          sudo mv /tmp/Blinkly/* /opt/Blinkly/
 
       - name: Stop wildduck service
         run: |
@@ -60,7 +35,7 @@ jobs:
 
       - name: Create folder /opt/wildduck-webmail
         run: |
-          sudo mkdir /opt/wildduck-webmail
+          sudo mkdir -p /opt/wildduck-webmail
 
       - name: Copy content to /opt/wildduck-webmail
         run: |
@@ -95,8 +70,8 @@ jobs:
       - name: Run installation and build commands
         run: |
           cd /opt/wildduck-webmail
-          sudo npm ci --silent > npm_install.log 2>&1  # Use npm ci for CI environments
-          sudo node -e "const { execSync } = require('child_process'); execSync('npm run bowerdeps', { stdio: 'inherit', maxBuffer: 1024 * 1024 * 10 });"  # Increased buffer size
+          sudo npm ci > npm_install.log 2>&1  # Log output to npm_install.log
+          sudo node -e "const { execSync } = require('child_process'); execSync('npm run bowerdeps', { stdio: 'pipe', maxBuffer: 1024 * 1024 * 10 })" > npm_build.log 2>&1  # Log output to npm_build.log
 
       - name: Updating files
         run: |
@@ -120,8 +95,8 @@ jobs:
       - name: Install packages in blinkly-email-app
         run: |
           cd /opt/wildduck-webmail/blinkly-email-app
-          sudo npm ci --silent > npm_install.log 2>&1
-          sudo npm run build --silent > npm_build.log 2>&1
+          sudo npm ci > npm_install.log 2>&1
+          sudo npm run build > npm_build.log 2>&1
 
       - name: Restart wildduck service
         run: |
