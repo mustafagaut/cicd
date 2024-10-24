@@ -25,9 +25,6 @@ jobs:
         run: |
           ls -la /opt/actions-runner/_work/cicd/cicd  # List contents to verify checkout
 
-      - name: List contents of the Blinkly directory
-        run: |
-          ls -la /opt/actions-runner/_work/cicd/cicd/Blinkly  # Check if Blinkly directory exists
 
       - name: Set up SSH agent
         uses: webfactory/ssh-agent@v0.5.4
