@@ -20,7 +20,7 @@ jobs:
 
       - name: Change to Blinkly directory
         run: |
-          cd /opt/BlinklyRepo/Blinkly
+          cd /opt/Blinkly
           pwd  # Print working directory to verify location
 
       - name: Pull latest changes
