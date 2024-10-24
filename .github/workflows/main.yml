@@ -18,8 +18,9 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Creating directory on test on EC2
+      - name: Create my_folder inside /opt
         run: |
           sudo mkdir -p /opt/my_folder
+          sudo chmod 755 /opt/my_folder
 
             
