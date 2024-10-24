@@ -25,7 +25,7 @@ jobs:
 
       - name: Pull latest changes
         run: |
-          cd /opt/BlinklyRepo/Blinkly
+          cd /opt/Blinkly
           git pull
 
       - name: Stop wildduck service
