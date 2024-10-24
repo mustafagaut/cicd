@@ -38,7 +38,6 @@ jobs:
       - name: Configure Git to use PAT for Pull
         run: |
           cd /opt/Blinkly
-          # Set the remote URL correctly without encoding
           sudo git remote set-url origin https://imtiyaz.ahmad:${{ secrets.BLINKLY_PAT }}@github.com/blinkly-crypto/Blinkly.git
 
       - name: Check Remote URL After Setting
@@ -96,15 +95,15 @@ jobs:
       - name: Run installation and build commands
         run: |
           cd /opt/wildduck-webmail
-          sudo npm install >/dev/null 2>&1
-          sudo npm run bowerdeps >/dev/null 2>&1
+          sudo npm ci > /dev/null 2>&1  # Use npm ci for CI environments
+          sudo npm run bowerdeps > /dev/null 2>&1
 
       - name: Updating files
         run: |
-          sudo sed -i 's|domain="localhost"|domain="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml >/dev/null 2>&1
-          sudo sed -i 's|blinkly.com|staging.blinkly.com|g' /opt/wildduck-webmail/public/login-key-handler.js >/dev/null 2>&1
-          sudo sed -i 's|nonBlinklyEmail="nonblinkly@blinkly.com"|nonBlinklyEmail="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml >/dev/null 2>&1
-          sudo sed -i 's|Stripe("pk_live_.*")|Stripe("pk_test_L97sPGzIcJfHVwh5KVg8NQMv00a50cuGg0")|g' /opt/wildduck-webmail/public/new/js/client.js >/dev/null 2>&1
+          sudo sed -i 's|domain="localhost"|domain="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
+          sudo sed -i 's|blinkly.com|staging.blinkly.com|g' /opt/wildduck-webmail/public/login-key-handler.js
+          sudo sed -i 's|nonBlinklyEmail="nonblinkly@blinkly.com"|nonBlinklyEmail="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
+          sudo sed -i 's|Stripe("pk_live_.*")|Stripe("pk_test_L97sPGzIcJfHVwh5KVg8NQMv00a50cuGg0")|g' /opt/wildduck-webmail/public/new/js/client.js
 
       - name: Create Env file inside Blinkly-email-app
         run: |
@@ -121,8 +120,8 @@ jobs:
       - name: Install packages in blinkly-email-app
         run: |
           cd /opt/wildduck-webmail/blinkly-email-app
-          sudo npm install >/dev/null 2>&1
-          sudo npm run build >/dev/null 2>&1
+          sudo npm ci > /dev/null 2>&1
+          sudo npm run build > /dev/null 2>&1
 
       - name: Restart wildduck service
         run: |
