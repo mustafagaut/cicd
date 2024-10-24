@@ -86,7 +86,7 @@ jobs:
           cd /opt/wildduck-webmail
           sudo npm install
           sudo npm run bowerdeps
-      - name: Updating files
+      - name: Updating files on the blinkly
         run: |
           sudo sed -i 's|domain="localhost"|domain="staging.blinkly.com"|g' /opt/wildduck-webmail/config/default.toml
           sudo sed -i 's|blinkly.com|staging.blinkly.com|g' /opt/wildduck-webmail/public/login-key-handler.js
