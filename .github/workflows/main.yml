@@ -23,7 +23,7 @@ jobs:
 
       - name: Mark Blinkly directory as safe
         run: |
-          git config --global --add safe.directory /opt/Blinkly
+          sudo git config --global --add safe.directory /opt/Blinkly
 
       - name: Change to Blinkly directory
         run: |
