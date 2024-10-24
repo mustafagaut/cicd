@@ -21,6 +21,5 @@ jobs:
       - name: Run Sudo Command on EC2
         run: |
           sudo mkdir -p /opt/my_folder
-          EOF
 
             
